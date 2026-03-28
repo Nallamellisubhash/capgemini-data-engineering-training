@@ -1,0 +1,17 @@
+customers = customers.dropna(subset=["customer_id"])
+orders = orders.dropna(subset=["customer_id"])
+orders.groupby("customer_id").sum("amount").show()
+from pyspark.sql.functions import sum, col
+
+orders = orders.withColumn("amount", col("amount").cast("int"))
+orders.groupBy("customer_id").agg(sum("amount").alias("total_spend")) .orderBy("total_spend", ascending=False) .limit(3).show()
+customers.join(orders,"customer_id","left").filter(orders["customer_id"].isNull()).show()
+customers.join(orders,"customer_id","left").groupby("city").sum("amount").show()
+customers.join(orders,"customer_id","left").groupby("customer_id").avg("amount").show()
+from pyspark.sql.functions import *
+customers = customers.withColumn("age", col("age").cast("int"))
+customers.join(orders,"customer_id","left").groupby("customer_id","customer_name").agg(count("order_id").alias("val")).filter(col("val")>1).show()
+orders.groupBy("customer_id") \
+      .agg(sum("amount").alias("total_spend")) \
+      .orderBy("total_spend", ascending=False) \
+      .show()
