@@ -1,0 +1,6 @@
+customers.show()
+orders.show()
+customers.filter(customers["city"]=="Chennai").show()
+customers.filter(customers["age"]>25).show()
+customers.select("customer_name","city").show()
+customers.groupby("city").count().show()
