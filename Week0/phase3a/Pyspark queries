@@ -1,0 +1,63 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+
+# Create Spark session (starting point of PySpark)
+spark=SparkSession.builder.appName("app").getOrCreate()
+
+# Create messy dataset
+data = [
+(1, "Ravi", "Hyderabad", 25),
+(2, None, "Chennai", 32),
+(None, "Arun", "Hyderabad", 28),
+(4, "Meena", None, 30),
+(4, "Meena", None, 30),
+(5, "John", "Bangalore", -5)
+]
+
+# Define column names
+columns = ["customer_id", "name", "city", "age"]
+
+# Create DataFrame from data
+df = spark.createDataFrame(data, columns)
+
+#  Identify Data Issues
+
+
+# Find rows with any null values (customer_id, name, city, age)
+df.filter(df["customer_id"].isNull() | df["name"].isNull()| df["city"].isNull()| df["age"].isNull()).show()
+
+# Find duplicate records by grouping customer_id and checking count >= 2
+df.groupBy("customer_id").count().filter("count>=2").show()
+
+# Find invalid data where age is negative
+df.filter(df["age"]<0).show()
+
+# Count total rows before cleaning
+print("before cleaning",df.count())
+
+
+#  Data Cleaning Steps
+
+
+# Remove rows where customer_id is null (important key column)
+df=df.dropna(subset=["customer_id"])
+df.show()
+
+# Fill missing values in name and city with 'unknown'
+df=df.fillna({"name":"unknown","city":"unknown"})
+df.show()
+
+# Remove duplicate rows
+df=df.dropDuplicates()
+df.show()
+
+# Check if invalid age values still exist (age < 0)
+df.filter("age<0").show()
+
+# Count rows after cleaning
+print("after cleaning",df.count())
+
+#  Aggregation
+
+# Count number of customers in each city
+df.groupby("city").agg(count("customer_id")).show()
