@@ -1,0 +1,99 @@
+-- ------------------------------------------------------------
+-- CREATE TABLES
+-- ------------------------------------------------------------
+CREATE TABLE customers (
+    customer_id INT,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    email VARCHAR(150),
+    phone_number VARCHAR(20),
+    address VARCHAR(200),
+    city VARCHAR(100),
+    state VARCHAR(50),
+    zip_code VARCHAR(20)
+);
+
+CREATE TABLE sales (
+    sale_id INT,
+    customer_id INT,
+    product_id INT,
+    sale_date DATE,
+    quantity INT,
+    total_amount DOUBLE
+);
+
+-- ------------------------------------------------------------
+-- INSERT UPDATED DATA INTO customers
+-- ------------------------------------------------------------
+INSERT INTO customers VALUES
+(1,'Aarav','Reddy','aarav.reddy@mail.com','900-1001','12 MG Road','Hyderabad','TS','500001'),
+(2,'Sneha','Sharma','sneha.sharma@mail.com','900-1002','45 Park Street','Kolkata','WB','700016'),
+(3,'Rahul','Verma','rahul.verma@mail.com','900-1003','78 Brigade Road','Bangalore','KA','560001'),
+(4,'Priya','Mehta','priya.mehta@mail.com','900-1004','21 Marine Drive','Mumbai','MH','400001'),
+(5,'Kiran','Patel','kiran.patel@mail.com','900-1005','56 Ring Road','Ahmedabad','GJ','380001');
+
+-- ------------------------------------------------------------
+-- INSERT UPDATED DATA INTO sales
+-- ------------------------------------------------------------
+INSERT INTO sales VALUES
+(1,1,201,'2024-02-10',2,499.98),
+(2,1,202,'2024-02-12',1,299.99),
+(3,2,203,'2024-02-11',1,150.00),
+(4,2,204,'2024-02-14',3,450.00),
+(5,3,205,'2024-02-13',2,799.98),
+(6,1,206,'2024-02-15',1,199.99),
+(7,4,207,'2024-02-10',2,999.98),
+(8,5,208,'2024-02-11',1,250.00),
+(9,5,209,'2024-02-13',2,500.00),
+(10,5,210,'2024-02-16',1,300.00);
+
+-- ------------------------------------------------------------
+-- 1. Daily Sales
+-- ------------------------------------------------------------
+SELECT sale_date, ROUND(SUM(total_amount),2) AS daily_sales
+FROM sales
+WHERE total_amount IS NOT NULL
+GROUP BY sale_date;
+
+-- ------------------------------------------------------------
+-- 2. City-wise Revenue
+-- ------------------------------------------------------------
+SELECT c.city, ROUND(SUM(s.total_amount),2) AS city_revenue
+FROM customers c
+JOIN sales s
+ON c.customer_id = s.customer_id
+GROUP BY c.city;
+
+-- ------------------------------------------------------------
+-- 3. Repeat Customers (>2 orders)
+-- ------------------------------------------------------------
+SELECT customer_id, COUNT(*) AS order_count
+FROM sales
+GROUP BY customer_id
+HAVING COUNT(*) > 2;
+
+-- ------------------------------------------------------------
+-- 4. Highest spending customer in each city
+-- ------------------------------------------------------------
+SELECT city, customer_id, total_spent
+FROM (
+    SELECT c.city, s.customer_id,
+           SUM(s.total_amount) AS total_spent,
+           RANK() OVER (PARTITION BY c.city ORDER BY SUM(s.total_amount) DESC) AS rnk
+    FROM customers c
+    JOIN sales s
+    ON c.customer_id = s.customer_id
+    GROUP BY c.city, s.customer_id
+) t
+WHERE rnk = 1;
+
+-- ------------------------------------------------------------
+-- 5. Final Reporting Table
+-- ------------------------------------------------------------
+SELECT c.customer_id, c.city,
+       ROUND(SUM(s.total_amount),2) AS total_spent,
+       COUNT(*) AS order_count
+FROM customers c
+JOIN sales s
+ON c.customer_id = s.customer_id
+GROUP BY c.customer_id, c.city;
