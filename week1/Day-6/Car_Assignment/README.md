@@ -1,13 +1,13 @@
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
  PySpark Data Processing Project
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
  Welcome!
 This project shows how to clean, transform, and analyze data using PySpark.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
  PROJECT OVERVIEW
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 ✔ Data Cleaning  
 ✔ Data Transformation  
 ✔ Data Validation  
@@ -20,16 +20,16 @@ Datasets used:
 → Sales  
 → Dealers  
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
  TECHNOLOGIES USED
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
  PySpark  
  Spark DataFrames  
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
  WORKFLOW (STEP BY STEP)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
 🔹 Step 1: Spark Session
    → Initialize Spark environment
@@ -57,16 +57,16 @@ Datasets used:
    → Group by city  
    → Calculate total revenue  
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
  OUTPUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 ✔ Cleaned Dataset  
 ✔ Revenue by City  
 ✔ Validated Data  
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
  KEY LEARNINGS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 ✔ Handling missing data  
 ✔ Working with joins  
 ✔ Using PySpark functions  
@@ -74,4 +74,4 @@ Datasets used:
 
 
 
-━
+
